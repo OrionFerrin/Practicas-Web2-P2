@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model Dispensador {
+  id_dispensador Int @id @default(autoincrement())
+  descripcion String @unique
+  consumos Consumo[]
+  
+  Estado            String?      @default("Activa")
+}
+model TipoGasolina{
+  idgasolina Int @id @default(autoincrement())
+  descripcion String 
+  costo Int 
+  consumos Consumo[]
+  
+  Estado            String?      @default("Activa")
+}
+model Consumo {
+  idconsumo Int @id @default(autoincrement())
+  tipodegasolina TipoGasolina @relation(fields: [tipogasolina], references: [idgasolina])
+  tipogasolina Int
+  dispensador Dispensador @relation(fields: [dispensadorid], references: [id_dispensador])
+  dispensadorid Int 
+  nGalones Int 
+  total Int
+  
+  Estado            String?      @default("Activa")
+}
